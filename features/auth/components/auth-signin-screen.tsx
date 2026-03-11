@@ -10,7 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-export const SignInScreen = () => {
+import { SignInFlow } from "../types";
+import { useState } from "react";
+interface SignInCardProps {
+  setState: (state: SignInFlow) => void;
+}
+
+export const SignInScreen = ({ setState }: SignInCardProps) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <>
       <Card className="w-full h-full ">
@@ -25,9 +33,11 @@ export const SignInScreen = () => {
             <Input
               placeholder="email"
               type="email"
-              value=""
+              value={email}
               disabled={false}
-              onChange={() => {}}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               required
             />
             <br />
@@ -35,8 +45,8 @@ export const SignInScreen = () => {
               placeholder="password"
               type="password"
               disabled={false}
-              value=""
-              onChange={() => {}}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <br />
@@ -70,7 +80,10 @@ export const SignInScreen = () => {
           </div>
           <p className="flex justify-center items-center">
             Don&apos;t have an account?
-            <span className="text-blue-500 hover:underline cursor-pointer">
+            <span
+              onClick={() => setState("signUp")}
+              className="text-blue-500 hover:underline cursor-pointer"
+            >
               Sign Up
             </span>
           </p>
@@ -80,3 +93,4 @@ export const SignInScreen = () => {
   );
 };
 //22:00
+//28:00

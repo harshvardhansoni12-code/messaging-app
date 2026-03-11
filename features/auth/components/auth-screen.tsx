@@ -26,11 +26,11 @@ export const AuthScreen = () => {
       </Button> */}
       {state === "signIn" ? (
         <div>
-          <SignInScreen />
+          <SignInScreen setState={setState} />
         </div>
       ) : (
         <div>
-          <SignUpScreen />
+          <SignUpScreen setState={setState} />
         </div>
       )}
     </>
