@@ -1,6 +1,5 @@
-import Image from "next/image";
 import { AuthScreen } from "@/features/auth/components/auth-screen";
-const SignIn = () => {
+const AuthPage = () => {
   return (
     <>
       <div className="h-screen w-full flex items-center justify-center bg-[#5C3B58]">
@@ -12,4 +11,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default AuthPage;

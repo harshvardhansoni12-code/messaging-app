@@ -11,14 +11,19 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { SignInFlow } from "../types";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 interface SignInCardProps {
   setState: (state: SignInFlow) => void;
 }
 
 export const SignInScreen = ({ setState }: SignInCardProps) => {
+  const { signIn } = useAuthActions();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleProviderSignIn = (value: "github" | "google") => {
+    signIn(value);
+  };
   return (
     <>
       <Card className="w-full h-full ">
@@ -68,7 +73,9 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
             </Button>
             <Button
               disabled={false}
-              onClick={() => {}}
+              onClick={() => {
+                handleProviderSignIn("github");
+              }}
               variant="outline"
               size="lg"
               className="w-full relative"
