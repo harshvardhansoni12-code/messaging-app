@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,31 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
   const { signIn } = useAuthActions();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleProviderSignIn = (value: "github" | "google") => {
-    signIn(value);
+  const [pending, setPending] = useState(false);
+  //
+  const onPasswordSignIn = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPending(true);
+    try {
+      await signIn("password", { email, password, flow: "signIn" });
+      toast.success("Welcome back!");
+    } catch (e) {
+      toast.error("Something went wrong");
+    } finally {
+      setPending(false);
+    }
+  };
+  //
+  const handleProviderSignIn = async (value: "github" | "google") => {
+    try {
+      setPending(true);
+      await signIn(value);
+      toast.success("Welcome back!");
+    } catch (e) {
+      toast.error("Something went wrong");
+    } finally {
+      setPending(false);
+    }
   };
   return (
     <>
@@ -34,12 +58,12 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
           Use your email or another services
         </CardDescription>
         <CardContent className="space-y-5 px-0 pb-0">
-          <form className="space-y-2.5 p-3.5">
+          <form onSubmit={onPasswordSignIn} className="space-y-2.5 p-3.5">
             <Input
               placeholder="email"
               type="email"
               value={email}
-              disabled={false}
+              disabled={pending}
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -49,7 +73,7 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
             <Input
               placeholder="password"
               type="password"
-              disabled={false}
+              disabled={pending}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -62,7 +86,7 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
           <Separator />
           <div className="flex flex-col gap-y-2.5 m-2.5">
             <Button
-              disabled={false}
+              disabled={pending}
               onClick={() => {}}
               variant="outline"
               size="lg"
@@ -72,7 +96,7 @@ export const SignInScreen = ({ setState }: SignInCardProps) => {
               Sign in with Google
             </Button>
             <Button
-              disabled={false}
+              disabled={pending}
               onClick={() => {
                 handleProviderSignIn("github");
               }}

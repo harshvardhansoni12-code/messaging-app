@@ -1,12 +1,19 @@
 "use client";
-
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useAuthActions } from "@convex-dev/auth/react";
 export default function Home() {
   const { signOut } = useAuthActions();
 
-  const handleSignOut = () => {
-    signOut();
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      toast.error("Something went wrong");
+      return;
+    } finally {
+      toast.success("You have been logged out.");
+    }
   };
   return (
     <>
