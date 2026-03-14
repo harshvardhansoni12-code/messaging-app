@@ -2,6 +2,7 @@
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { UserButton } from "@/features/auth/components/user-button";
 export default function Home() {
   const { signOut } = useAuthActions();
 
@@ -17,7 +18,7 @@ export default function Home() {
   };
   return (
     <>
-      <div className="h-screen w-full flex items-center justify-center">
+      <div className="h-20px w-full flex">
         <div className="md:h-auto md:w-90">this is home page</div>
         <Button
           onClick={() => {
@@ -26,6 +27,7 @@ export default function Home() {
         >
           log out
         </Button>
+        <UserButton />
       </div>
     </>
   );

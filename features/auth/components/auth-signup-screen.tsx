@@ -20,6 +20,7 @@ interface SignUpCardProps {
 }
 
 export const SignUpScreen = ({ setState }: SignUpCardProps) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -36,7 +37,7 @@ export const SignUpScreen = ({ setState }: SignUpCardProps) => {
       return;
     } else {
       try {
-        await signIn("password", { email, password, flow: "signUp" });
+        await signIn("password", { name, email, password, flow: "signUp" });
         toast.success("Welcome back!");
       } catch (e) {
         toast.error("Something went wrong");
@@ -70,6 +71,16 @@ export const SignUpScreen = ({ setState }: SignUpCardProps) => {
         </CardDescription>
         <CardContent className="space-y-5 px-0 pb-0">
           <form className="space-y-2.5 p-3.5" onSubmit={onPasswordSignUp}>
+            <Input
+              placeholder="Full Name"
+              type="text"
+              disabled={pending}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              required
+            />
+            <br />
             <Input
               placeholder="email"
               type="email"
@@ -145,5 +156,4 @@ export const SignUpScreen = ({ setState }: SignUpCardProps) => {
   );
 };
 
-//35:00
-//1:30:00
+//1:39:00
