@@ -9,9 +9,21 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import toast from "react-hot-toast";
+import { useCurrentUser } from "@/features/hooks/use-current-user";
+import { Loader } from "lucide-react";
 export const UserButton = () => {
+  const { data, isLoading } = useCurrentUser();
   const { signOut } = useAuthActions();
   const router = useRouter();
+
+  if (isLoading) {
+    return <Loader className="size-4 animate-spin text-muted-foreground" />;
+  }
+
+  if (!data) {
+    return null;
+  }
+
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -22,13 +34,18 @@ export const UserButton = () => {
       toast.success("You have been logged out.");
     }
   };
+  const { image, name, email } = data;
+  //first letter of name as uppercase as fallback for avatar
+  const avatarFallback = name ? name[0].toUpperCase() : "";
   return (
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger className="">
           <Avatar className="size-10">
-            <AvatarImage />
-            <AvatarFallback></AvatarFallback>
+            <AvatarImage alt={name} src={image} />
+            <AvatarFallback className="bg-sky-500 text-white">
+              {avatarFallback}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="center" side="right" className="">
@@ -47,6 +64,14 @@ export const UserButton = () => {
             className="hover:bg-amber-50"
           >
             Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              router.push("/help");
+            }}
+            className="hover:bg-amber-50"
+          >
+            Help
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
