@@ -10,18 +10,51 @@ import {
 
 import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
+import { useCreateWorkspace } from "../api/use-create-workspace";
+import { useRouter } from "next/navigation";
 
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
+  const { mutate } = useCreateWorkspace();
+  const router = useRouter();
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = async () => {
+    try {
+      const data = await mutate(
+        { name: "Workspace 1" },
+        {
+          onSuccess: (data) => {
+            setOpen(false);
+            router.push(`/workspace/${data}`);
+          },
+          onError: (error) => {
+            // error handling
+          },
+          onSettled: () => {
+            // cleanup
+          },
+        },
+      );
+    } catch {
+    } finally {
+    }
+  };
+  //
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>Add a worspace</DialogHeader>
         <DialogTitle>Enter your workspace name</DialogTitle>
-        <form className="space-y-4">
+        <form
+          className="space-y-4"
+          onSubmit={() => {
+            handleSubmit();
+          }}
+        >
           <input
             value=""
             disabled={false}
