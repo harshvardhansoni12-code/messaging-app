@@ -3,11 +3,10 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
+import { useState } from "react";
 import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
@@ -15,33 +14,27 @@ import { useRouter } from "next/navigation";
 
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
-  const { mutate } = useCreateWorkspace();
+  const [name, setName] = useState("");
+  const { mutate, data, error, isError, isPending, isSuccess, isSettled } =
+    useCreateWorkspace();
   const router = useRouter();
 
   const handleClose = () => {
     setOpen(false);
+    setName("");
   };
 
-  const handleSubmit = async () => {
-    try {
-      const data = await mutate(
-        { name: "Workspace 1" },
-        {
-          onSuccess: (data) => {
-            setOpen(false);
-            router.push(`/workspace/${data}`);
-          },
-          onError: (error) => {
-            // error handling
-          },
-          onSettled: () => {
-            // cleanup
-          },
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault;
+    mutate(
+      { name },
+      {
+        onSuccess(id) {
+          router.push(`/workspace/${id}`);
+          handleClose();
         },
-      );
-    } catch {
-    } finally {
-    }
+      },
+    );
   };
   //
   return (
@@ -49,16 +42,13 @@ export const CreateWorkspaceModal = () => {
       <DialogContent>
         <DialogHeader>Add a worspace</DialogHeader>
         <DialogTitle>Enter your workspace name</DialogTitle>
-        <form
-          className="space-y-4"
-          onSubmit={() => {
-            handleSubmit();
-          }}
-        >
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
-            value=""
-            disabled={false}
-            onChange={() => {}}
+            value={name}
+            disabled={isPending}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
             type="text"
             className="w-full rounded-md p-2 border-2"
             placeholder="Workspace name e.g. 'friends', 'family', 'work', etc."
@@ -66,7 +56,7 @@ export const CreateWorkspaceModal = () => {
             autoFocus
           />
           <div className="flex justify-end">
-            <Button disabled={false}>Create </Button>
+            <Button disabled={isPending}>Create </Button>
           </div>
         </form>
       </DialogContent>

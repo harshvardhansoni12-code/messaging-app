@@ -1,9 +1,9 @@
 import { useMutation } from "convex/react";
-
 import { api } from "../../../convex/_generated/api";
 import { useCallback } from "react";
 import { Id } from "../../../convex/_generated/dataModel";
 import { useState } from "react";
+import { useMemo } from "react";
 //////////////
 type RequestType = { name: string };
 type ResponseType = Id<"workspaces"> | null;
@@ -18,22 +18,27 @@ type Options = {
 export const useCreateWorkspace = () => {
   const [data, setData] = useState<ResponseType>(null);
   const [error, setError] = useState(null);
+  const [status, setStatus] = useState<
+    "success" | "error" | "settled" | "pending" | null
+  >(null);
   //
-  const [isPending, setIsPending] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
+  //
+  const isPending = useMemo(() => status === "pending", [status]);
+  const isSuccess = useMemo(() => status === "success", [status]);
+  const isError = useMemo(() => status === "error", [status]);
+  const isSettled = useMemo(() => status === "settled", [status]);
+
   const mutation = useMutation(api.workspaces.create);
   const mutate = useCallback(
     async (values: RequestType, options: Options) => {
       try {
         setData(null);
         setError(null);
-        setIsError(false);
-        setIsSuccess(false);
-        setIsPending(true);
+        setStatus("pending");
         const response = await mutation(values);
         options?.onSuccess?.(response);
-        setIsPending(false);
+
+        return response;
       } catch (error) {
         options?.onError?.(error as Error);
         if (options?.throwError) {
@@ -41,6 +46,7 @@ export const useCreateWorkspace = () => {
         }
       } finally {
         options?.onSettled?.();
+        setStatus("settled");
       }
     },
     [mutation],
@@ -48,6 +54,12 @@ export const useCreateWorkspace = () => {
 
   return {
     mutate,
+    data,
+    error,
+    isError,
+    isPending,
+    isSuccess,
+    isSettled,
   };
 };
 //2:21:24
