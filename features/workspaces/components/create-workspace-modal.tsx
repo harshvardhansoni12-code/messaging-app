@@ -56,7 +56,7 @@ export const CreateWorkspaceModal = () => {
             autoFocus
           />
           <div className="flex justify-end">
-            <Button disabled={isPending}>Create </Button>
+            <Button disabled={isPending}>Create</Button>
           </div>
         </form>
       </DialogContent>

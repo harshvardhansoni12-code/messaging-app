@@ -1,19 +1,11 @@
 "use client";
 
-interface WorkspaceIdPageProps {
-  params: {
-    workspaceId: string;
-  };
-}
+import { useParams } from "next/navigation";
+import { useWorkspaceId } from "../../../hooks/use-workspace-id";
+const WorkspaceIdPage = async () => {
+  const workspaceId = useWorkspaceId();
 
-const WorkspaceIdPage = async ({
-  params,
-}: {
-  params: Promise<{ workspaceId: string }>;
-}) => {
-  const { workspaceId } = await params;
-
-  return <div>ID: {workspaceId}</div>;
+  return <div>ID : {workspaceId}</div>;
 };
-
 export default WorkspaceIdPage;
+//2:51:00
