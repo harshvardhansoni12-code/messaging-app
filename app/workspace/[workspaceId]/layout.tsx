@@ -10,12 +10,12 @@ interface WorkspaceIdLayoutProps {
 
 const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
   return (
-    <div className="h-full ">
+    <div className="h-full">
       <ToolBar />
-      <div className="flex h-[100vh-40px]">
+      <div className="flex h-full">
         <SideBar />
+        {children}
       </div>
-      {children}
     </div>
   );
 };
