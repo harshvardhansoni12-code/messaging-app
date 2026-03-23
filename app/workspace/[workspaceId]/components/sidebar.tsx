@@ -4,7 +4,6 @@ const SideBar = () => {
   return (
     <>
       <aside className="w-20 h-full bg-[#481349] flex flex-col items-center justify-between pt-1">
-        <div>hello</div>
         <WorkspaceSwitcher />
         <div>
           <UserButton />

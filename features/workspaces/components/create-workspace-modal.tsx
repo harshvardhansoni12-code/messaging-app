@@ -11,13 +11,15 @@ import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
 import { useRouter } from "next/navigation";
-
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { useGetWorkspace } from "../api/use-get-workspace";
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
+  const workspaceId = useWorkspaceId();
+
   const [name, setName] = useState("");
   const { mutate, data, error, isError, isPending, isSuccess, isSettled } =
     useCreateWorkspace();
-  const router = useRouter();
 
   const handleClose = () => {
     setOpen(false);
@@ -30,7 +32,6 @@ export const CreateWorkspaceModal = () => {
       { name },
       {
         onSuccess(id) {
-          router.push(`/workspace/${id}`);
           handleClose();
         },
       },
