@@ -15,6 +15,8 @@ import { useCreateWorkspace } from "@/features/workspaces/api/use-create-workspa
 import { useCreateWorkspaceModal } from "@/features/workspaces/store/use-create-workspace-modal";
 import Loadable from "next/dist/shared/lib/loadable.shared-runtime";
 import { Loader } from "lucide-react";
+
+//
 const WorkspaceSwitcher = () => {
   const router = useRouter();
   const workspaceId = useWorkspaceId();
@@ -33,7 +35,7 @@ const WorkspaceSwitcher = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#50505a]">
           {workspaceLoading ? (
             <Loader className="size-5 animate-spin shrik-0" />
@@ -64,3 +66,4 @@ const WorkspaceSwitcher = () => {
 };
 
 export default WorkspaceSwitcher;
+//
