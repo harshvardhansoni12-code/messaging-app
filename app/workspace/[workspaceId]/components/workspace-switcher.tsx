@@ -64,7 +64,7 @@ const WorkspaceSwitcher = () => {
             setOpen(true);
           }}
         >
-          <div className="size-9 relative overflow-hidden bg-[#F2F2F2] text-slate-800 font-semibold text-lg rounded-md flex items-center justify-center">
+          <div className="size-9 relative overflow-hidden bg-[#616061] text-white font-semibold text-lg rounded-md flex items-center justify-center">
             <Plus />
           </div>
           <span>Create a new workspace</span>

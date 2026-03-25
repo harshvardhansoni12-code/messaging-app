@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
@@ -35,6 +36,11 @@ export const CreateWorkspaceModal = () => {
           handleClose();
           if (data) {
             router.push(`/workspace/${data._id}`);
+            toast.success("Workspace created and opened");
+          } else {
+            toast("Workspace already exists; kept current session", {
+              icon: "ℹ️",
+            });
           }
         },
       },

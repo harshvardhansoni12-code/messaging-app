@@ -1,6 +1,5 @@
 import { defineSchema, defineTable } from "convex/server";
 import { authTables } from "@convex-dev/auth/server";
-import { use } from "react";
 import { v } from "convex/values";
 
 const schema = defineSchema({
@@ -8,7 +7,7 @@ const schema = defineSchema({
   // Your other tables...
   workspaces: defineTable({
     name: v.string(),
-    userIds: v.array(v.id("users")),
+    userIds: v.union(v.id("users"), v.array(v.id("users"))),
     joinCode: v.string(),
   }),
 });

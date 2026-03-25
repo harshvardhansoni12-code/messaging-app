@@ -7,22 +7,22 @@ import { useEffect, useMemo } from "react";
 import { useCreateWorkspaceModal } from "@/features/workspaces/store/use-create-workspace-modal";
 import { useRouter } from "next/navigation";
 export default function Home() {
-  const { data, isLoading } = useGetWorkspaces();
+  const { data, workspaceLoading } = useGetWorkspaces();
   const [open, setOpen] = useCreateWorkspaceModal();
   const router = useRouter();
   const workspaceId = useMemo(() => data?.[0]?._id, [data]);
-  /* Show toast notification when workspaceId is available */
   useEffect(() => {
-    if (isLoading) return;
-    if (workspaceId) {
-      toast.success(`Workspace created`);
-      router.replace(`/workspace/${workspaceId}`);
-    } else if (!open) {
-      setOpen(true);
-    } else {
-      toast.error("No workspace found");
+    if (workspaceLoading) return;
+    if (!open) {
+      if (!workspaceId) {
+        setOpen(true);
+        toast.error("No workspace found. Create one.");
+      } else {
+        toast.success("welcome");
+        router.push(`/workspace/${workspaceId}`);
+      }
     }
-  }, [isLoading, workspaceId, open, setOpen, router]);
+  }, [workspaceLoading, workspaceId, open, setOpen]);
   //
   return (
     <>
