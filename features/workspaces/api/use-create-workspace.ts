@@ -1,74 +1,70 @@
 import { useMutation } from "convex/react";
-
-
+import { useCallback, useState } from "react";
 
 import { api } from "../../../convex/_generated/api";
-
-import { useCallback } from "react";
-
 import { Id } from "../../../convex/_generated/dataModel";
-
-
 
 //////////////
 
-type RequestType = {name: string};
-
-type ResponseType = { _id: Id<"workspaces">; _creationTime: number; name: string; userIds: Id<"users">; joinCode: string; } | null;
-
-
+type RequestType = { name: string };
+type ResponseType = {
+  _id: Id<"workspaces">;
+  _creationTime: number;
+  name: string;
+  userIds: Id<"users">;
+  joinCode: string;
+} | null;
 
 type Options = {
-
   onSuccess?: (data: ResponseType) => void;
-
-  onError?: () => void;
-
+  onError?: (error: unknown) => void;
   onSettled?: () => void;
-
 };
 
-
-
 export const useCreateWorkspace = () => {
-
   const mutation = useMutation(api.workspaces.create);
 
-  const mutate = useCallback(
+  const [data, setData] = useState<ResponseType>(null);
+  const [error, setError] = useState<unknown>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSettled, setIsSettled] = useState(false);
 
-    async (values: RequestType, options: Options) => {
+  const mutate = useCallback(
+    async (values: RequestType, options: Options = {}) => {
+      setIsPending(true);
+      setIsSuccess(false);
+      setIsError(false);
+      setIsSettled(false);
 
       try {
-
         const response = await mutation(values);
-
-        options?.onSuccess?.(response);
-
-      } catch {
-
-        options?.onError?.();
-
+        setData(response);
+        setIsSuccess(true);
+        options.onSuccess?.(response);
+      } catch (err) {
+        setError(err);
+        setIsError(true);
+        options.onError?.(err);
       } finally {
-
-        options?.onSettled?.();
-
+        setIsPending(false);
+        setIsSettled(true);
+        options.onSettled?.();
       }
-
     },
-
     [mutation],
-
   );
 
-
-
   return {
-
     mutate,
-
+    data,
+    error,
+    isPending,
+    isSuccess,
+    isError,
+    isSettled,
   };
-
 };
 
 //2:21:24
-

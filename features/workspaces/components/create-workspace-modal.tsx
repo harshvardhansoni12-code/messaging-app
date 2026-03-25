@@ -10,28 +10,27 @@ import { useState } from "react";
 import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
-import { useRouter } from "next/navigation";
-import { useWorkspaceId } from "@/hooks/use-workspace-id";
-import { useGetWorkspace } from "../api/use-get-workspace";
+
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
-  const workspaceId = useWorkspaceId();
 
   const [name, setName] = useState("");
-  const { mutate, data, error, isError, isPending, isSuccess, isSettled } =
-    useCreateWorkspace();
+  const { mutate, isPending } = useCreateWorkspace();
 
   const handleClose = () => {
     setOpen(false);
     setName("");
   };
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!name.trim()) return;
+
     mutate(
-      { name },
+      { name: name.trim() },
       {
-        onSuccess(id) {
+        onSuccess() {
           handleClose();
         },
       },
@@ -39,7 +38,7 @@ export const CreateWorkspaceModal = () => {
   };
   //
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={(nextOpen) => setOpen(nextOpen)}>
       <DialogContent>
         <DialogHeader>Add a worspace</DialogHeader>
         <DialogTitle>Enter your workspace name</DialogTitle>
