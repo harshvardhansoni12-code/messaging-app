@@ -7,14 +7,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { useRouter } from "next/navigation";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
 import { useGetWorkspaces } from "@/features/workspaces/api/use-get-workspaces";
-import { useCreateWorkspace } from "@/features/workspaces/api/use-create-workspace";
 import { useCreateWorkspaceModal } from "@/features/workspaces/store/use-create-workspace-modal";
-import Loadable from "next/dist/shared/lib/loadable.shared-runtime";
-import { Loader } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 
 //
 const WorkspaceSwitcher = () => {
@@ -38,14 +37,13 @@ const WorkspaceSwitcher = () => {
       <DropdownMenuTrigger asChild>
         <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#50505a]">
           {workspaceLoading ? (
-            <Loader className="size-5 animate-spin shrik-0" />
+            <Loader className="size-5 animate-spin shrink-0" />
           ) : (
             workspace?.name.charAt(0).toUpperCase()
           )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="start" className="w-64">
-        <DropdownMenuItem className="hover:bg-amber-50">Help</DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             router.push(`/workspace/${workspaceId}`);
@@ -59,6 +57,17 @@ const WorkspaceSwitcher = () => {
         >
           {workspace?.name}
           <span className="text-xs">Active workspace</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <div className="size-9 relative overflow-hidden bg-[#F2F2F2] text-slate-800 font-semibold text-lg rounded-md flex items-center justify-center">
+            <Plus />
+          </div>
+          <span>Create a new workspace</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

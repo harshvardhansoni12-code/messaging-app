@@ -6,13 +6,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCreateWorkspaceModal } from "../store/use-create-workspace-modal";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
-
+import { useState } from "react";
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const { mutate, isPending } = useCreateWorkspace();
@@ -30,8 +31,11 @@ export const CreateWorkspaceModal = () => {
     mutate(
       { name: name.trim() },
       {
-        onSuccess() {
+        onSuccess(data) {
           handleClose();
+          if (data) {
+            router.push(`/workspace/${data._id}`);
+          }
         },
       },
     );

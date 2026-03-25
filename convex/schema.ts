@@ -8,7 +8,7 @@ const schema = defineSchema({
   // Your other tables...
   workspaces: defineTable({
     name: v.string(),
-    userIds: v.id("users"),
+    userIds: v.array(v.id("users")),
     joinCode: v.string(),
   }),
 });

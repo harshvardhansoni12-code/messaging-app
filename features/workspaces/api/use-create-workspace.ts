@@ -11,7 +11,7 @@ type ResponseType = {
   _id: Id<"workspaces">;
   _creationTime: number;
   name: string;
-  userIds: Id<"users">;
+  userIds: Id<"users">[];
   joinCode: string;
 } | null;
 
